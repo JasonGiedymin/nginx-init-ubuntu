@@ -6,7 +6,7 @@
 # description:  Nginx is an HTTP(S) server, HTTP(S) reverse \
 #               proxy and IMAP/POP3 proxy server.  This \
 #               script will manage the initiation of the \
-#               server and it's process state.
+#               server and the server process state.
 #
 # processname: nginx
 # config:      /usr/local/nginx/conf/nginx.conf
@@ -15,6 +15,7 @@
 #
 # Author:  Jason Giedymin
 #          <jason.giedymin AT acronymlabs.com>.
+# WebSite:    http://code.google.com/p/nginx-init-ubuntu/
 #
 # Version: 1.0 01-Apr-2009 jason.giedymin AT gmail.com
 # Notes: nginx init.d script for Ubuntu 8.10 and less versions.
