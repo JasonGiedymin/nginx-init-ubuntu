@@ -5,12 +5,12 @@
 #
 # description:  Nginx is an HTTP(S) server, HTTP(S) reverse \
 #               proxy and IMAP/POP3 proxy server.  This \
-#		script will manage the initiation of the \
-#		server and it's process state.
+#               script will manage the initiation of the \
+#               server and it's process state.
 #
 # processname: nginx
 # config:      /usr/local/nginx/conf/nginx.conf
-# pidfile:     /acronymlabs/server/nginx.pid
+# pidfile:     /usr/local/nginx/logs/nginx.pid
 # Provides:    nginx
 #
 # Author:  Jason Giedymin
@@ -43,7 +43,8 @@
 # LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-#
+#------------------------------------------------------------------------------
+
 #------------------------------------------------------------------------------
 #                               Functions
 #------------------------------------------------------------------------------
@@ -53,12 +54,12 @@
 #                               Consts
 #------------------------------------------------------------------------------
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-DAEMON=/usr/local/sbin/nginx
+DAEMON=/usr/local/nginx/sbin/nginx
 
 NAME=nginx
 DESCRIPTION="Nginx Server..."
 
-PIDSPATH=/acronymlabs/server
+PIDSPATH=/usr/local/nginx/logs
 PS=$NAME				#the process, which happens to be the NAME
 PIDFILE=$NAME.pid			#pid file
 RUNAS=root				#user to run as
