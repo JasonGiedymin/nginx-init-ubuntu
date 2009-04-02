@@ -1,0 +1,243 @@
+#! /bin/sh
+#
+#------------------------------------------------------------------------------
+# nginx - this script, which starts and stops the nginx daemon for ubuntu.
+#
+# description:  Nginx is an HTTP(S) server, HTTP(S) reverse \
+#               proxy and IMAP/POP3 proxy server.  This \
+#		script will manage the initiation of the \
+#		server and it's process state.
+#
+# processname: nginx
+# config:      /usr/local/nginx/conf/nginx.conf
+# pidfile:     /acronymlabs/server/nginx.pid
+# Provides:    nginx
+#
+# Author:  Jason Giedymin
+#          <jason.giedymin AT acronymlabs.com>.
+#
+# Version: 1.0 01-Apr-2009 jason.giedymin AT gmail.com
+# Notes: nginx init.d script for Ubuntu 8.10 and less versions.
+#
+#------------------------------------------------------------------------------
+#                               MIT X11 License
+#------------------------------------------------------------------------------
+#
+# Copyright (c) 2009 Jason Giedymin, http://AcronymLabs.com
+#
+# Permission is hereby granted, free of charge, to any person obtaining
+# a copy of this software and associated documentation files (the
+# "Software"), to deal in the Software without restriction, including
+# without limitation the rights to use, copy, modify, merge, publish,
+# distribute, sublicense, and/or sell copies of the Software, and to
+# permit persons to whom the Software is furnished to do so, subject to
+# the following conditions:
+#
+# The above copyright notice and this permission notice shall be
+# included in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+# LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+# OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+# WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+#
+#------------------------------------------------------------------------------
+#                               Functions
+#------------------------------------------------------------------------------
+. /lib/lsb/init-functions
+
+#------------------------------------------------------------------------------
+#                               Consts
+#------------------------------------------------------------------------------
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+DAEMON=/usr/local/sbin/nginx
+
+NAME=nginx
+DESCRIPTION="Nginx Server..."
+
+PIDSPATH=/acronymlabs/server
+PS=$NAME				#the process, which happens to be the NAME
+PIDFILE=$NAME.pid			#pid file
+RUNAS=root				#user to run as
+PSMIN=2					#pgrep always returns two lines, hack
+
+SCRIPT_OK=0
+SCRIPT_ERROR=1
+TRUE=1
+FALSE=0
+
+lockfile=/var/lock/subsys/nginx
+NGINX_CONF_FILE="/usr/local/nginx/conf/nginx.conf"
+
+#------------------------------------------------------------------------------
+#                               Simple Tests
+#------------------------------------------------------------------------------
+
+#test if nginx is a file and executable
+test -x $DAEMON || exit 0
+
+# Include nginx defaults if available
+if [ -f /etc/default/nginx ] ; then
+        . /etc/default/nginx
+fi
+
+#set exit condition
+#set -e
+
+#------------------------------------------------------------------------------
+#                               Functions
+#------------------------------------------------------------------------------
+
+configtest() {
+	$DAEMON -t -c $NGINX_CONF_FILE
+}
+
+getPSCount() {
+	return `pgrep -f $PS | wc -l`
+}
+
+isRunning(){
+	getPSCount
+	PSFOUND="$?"
+
+	if [ $PSFOUND -gt $PSMIN ]; then
+		return $TRUE
+	else
+		return $FALSE
+	fi
+}
+
+status(){
+	getPSCount
+	PSFOUND="$?"
+
+	if [ $PSFOUND -gt $PSMIN ]; then
+		PSFINALCOUNT=`expr $PSFOUND - $PSMIN`
+                echo "$NAME found running with $PSFINALCOUNT processes:  `pidof $PS`"
+        else
+                echo "$NAME is NOT running."
+        fi
+}
+
+removePIDFile(){
+	if [ -f $PIDSPATH/$NAME.pid ]; then
+        	rm $PIDSPATH/$SRVNAME.pid
+        fi
+}
+
+start() {
+        log_daemon_msg "Starting $DESCRIPTION"
+	
+	isRunning
+	
+        if [ $? -eq $TRUE ]; then
+                log_end_msg $SCRIPT_ERROR
+        else
+                start-stop-daemon --start --quiet --chuid $RUNAS --pidfile $PIDSPATH/$PIDFILE --exec $DAEMON
+                chmod 400 $PIDSPATH/$PIDFILE
+                log_end_msg $SCRIPT_OK
+        fi
+}
+
+stop() {
+	log_daemon_msg "Stopping $DESCRIPTION"
+
+	isRunning
+        if [ $? -eq $TRUE ]; then
+                start-stop-daemon --stop --quiet --pidfile $PIDSPATH/$PIDFILE
+
+		removePIDFile
+
+                log_end_msg $SCRIPT_OK
+        else
+                log_end_msg $SCRIPT_ERROR
+        fi
+}
+
+reload() {
+	configtest || return $?
+
+	log_daemon_msg "Reloading (via HUP) $DESCRIPTION"
+
+        isRunning
+        if [ $? -eq $TRUE ]; then
+		`killall -HUP $PS` #to be safe
+
+                log_end_msg $SCRIPT_OK
+        else
+                log_end_msg $SCRIPT_ERROR
+        fi
+}
+
+terminate() {
+        log_daemon_msg "Force terminating (via SIGTERM) $DESCRIPTION"
+
+        #isRunning
+        #if [ $? -eq $TRUE ]; then
+        #       `killall -q -9 $PS` #to be safe
+
+        #        log_end_msg $SCRIPT_OK
+        #else
+        #        log_end_msg $SCRIPT_ERROR
+        #fi
+
+	PID=$(pidof_daemon)
+	if [ "${PID}" ]; then
+		kill $PID
+		log_end_msg $SCRIPT_OK
+        elif [ "$(pidof $PS)" ]; then #need to refactor this...
+		log_end_msg $SCRIPT_ERROR
+	else
+		log_end_msg $SCRIPT_ERROR
+	fi
+
+}
+
+pidof_daemon() {
+    PIDS=`pidof $PS` || true
+
+    [ -e $PIDSPATH/$PIDFILE ] && PIDS2=`cat $PIDSPATH/$PIDFILE`
+
+    for i in $PIDS; do
+        if [ "$i" = "$PIDS2" ]; then
+            echo $i
+            return 0
+        fi
+    done
+    return 1
+}
+
+case "$1" in
+  start)
+	start
+        ;;
+  stop)
+	stop
+        ;;
+  restart|force-reload)
+	start
+	stop
+        ;;
+  reload)
+	$1
+	;;
+  status)
+	status
+	;;
+  configtest)
+        $1
+        ;;
+  terminate)
+	$1
+	;;
+  *)
+	FULLPATH=/etc/init.d/$NAME
+	echo "Usage: $FULLPATH {start|stop|restart|force-reload|status|configtest|terminate}"
+	exit 1
+	;;
+esac
+
+exit 0
