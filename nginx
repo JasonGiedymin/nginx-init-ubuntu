@@ -173,16 +173,7 @@ reload() {
 }
 
 terminate() {
-        log_daemon_msg "Force terminating (via SIGTERM) $DESCRIPTION"
-
-        #isRunning
-        #if [ $? -eq $TRUE ]; then
-        #       `killall -q -9 $PS` #to be safe
-
-        #        log_end_msg $SCRIPT_OK
-        #else
-        #        log_end_msg $SCRIPT_ERROR
-        #fi
+        log_daemon_msg "Force terminating (via KILL) $DESCRIPTION"
 
 	PID=$(pidof_daemon)
 	if [ "${PID}" ]; then
