@@ -1,21 +1,28 @@
 #! /bin/sh
-#
+### BEGIN INIT INFO
+# Provides:          nginx
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: nginx init.d script for Ubuntu 8.10 and lesser versions.
+# Description:       nginx init.d script for Ubuntu 8.10 and lesser versions.
+### END INIT INFO
 #------------------------------------------------------------------------------
 # nginx - this script, which starts and stops the nginx daemon for ubuntu.
 #
 # description:  Nginx is an HTTP(S) server, HTTP(S) reverse \
 #               proxy and IMAP/POP3 proxy server.  This \
-#               script will manage the initiation of the \
-#               server and the server process state.
+#		script will manage the initiation of the \
+#		server and it's process state.
 #
 # processname: nginx
 # config:      /usr/local/nginx/conf/nginx.conf
-# pidfile:     /usr/local/nginx/logs/nginx.pid
+# pidfile:     /acronymlabs/server/nginx.pid
 # Provides:    nginx
 #
 # Author:  Jason Giedymin
 #          <jason.giedymin AT acronymlabs.com>.
-# WebSite:    http://code.google.com/p/nginx-init-ubuntu/
 #
 # Version: 1.0 01-Apr-2009 jason.giedymin AT gmail.com
 # Notes: nginx init.d script for Ubuntu 8.10 and less versions.
@@ -55,12 +62,12 @@
 #                               Consts
 #------------------------------------------------------------------------------
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-DAEMON=/usr/local/nginx/sbin/nginx
+DAEMON=/usr/local/sbin/nginx
 
 NAME=nginx
 DESCRIPTION="Nginx Server..."
 
-PIDSPATH=/usr/local/nginx/logs
+PIDSPATH=/acronymlabs/server
 PS=$NAME				#the process, which happens to be the NAME
 PIDFILE=$NAME.pid			#pid file
 RUNAS=root				#user to run as
@@ -115,10 +122,10 @@ isRunning(){
 status(){
 	PID=$(pidof_daemon)
         if [ "${PID}" ]; then
-                echo "$NAME found running with $PSFINALCOUNT processes:  `pidof $PS`"
-        else
-                echo "$NAME is NOT running."
-        fi
+		echo "$NAME found running with $PSFINALCOUNT processes:  `pidof $PS`"
+	else
+		echo "$NAME is NOT running."
+	fi
 }
 
 removePIDFile(){
