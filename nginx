@@ -71,12 +71,11 @@ PIDSPATH=/acronymlabs/server
 PS=$NAME				#the process, which happens to be the NAME
 PIDFILE=$NAME.pid			#pid file
 RUNAS=root				#user to run as
-PSMIN=2					#pgrep always returns two lines, hack
 
-SCRIPT_OK=0
-SCRIPT_ERROR=1
-TRUE=1
-FALSE=0
+SCRIPT_OK=0				#ala error codes
+SCRIPT_ERROR=1				#ala error codes
+TRUE=1					#boolean
+FALSE=0					#boolean
 
 lockfile=/var/lock/subsys/nginx
 NGINX_CONF_FILE="/usr/local/nginx/conf/nginx.conf"
@@ -109,28 +108,32 @@ getPSCount() {
 }
 
 isRunning(){
-	getPSCount
-	PSFOUND="$?"
+	pidof_daemon
+	PID=$?
 
-	if [ $PSFOUND -gt $PSMIN ]; then
-		return $TRUE
-	else
-		return $FALSE
-	fi
+	if [ $PID -gt 0 ]; then
+		return 1
+        else
+                return 0
+        fi
 }
 
 status(){
-	PID=$(pidof_daemon)
-        if [ "${PID}" ]; then
-		echo "$NAME found running with $PSFINALCOUNT processes:  `pidof $PS`"
-	else
-		echo "$NAME is NOT running."
-	fi
+	isRunning
+	isAlive=$?
+
+	if [ "${isAlive}" -eq $TRUE ]; then
+                echo "$NAME found running with processes:  `pidof $PS`"
+        else
+                echo "$NAME is NOT running."
+        fi
+
+
 }
 
 removePIDFile(){
 	if [ -f $PIDSPATH/$NAME.pid ]; then
-        	rm $PIDSPATH/$SRVNAME.pid
+        	rm $PIDSPATH/$NAME.pid
         fi
 }
 
@@ -138,8 +141,9 @@ start() {
         log_daemon_msg "Starting $DESCRIPTION"
 	
 	isRunning
+	isAlive=$?
 	
-        if [ $? -eq $TRUE ]; then
+        if [ "${isAlive}" -eq $TRUE ]; then
                 log_end_msg $SCRIPT_ERROR
         else
                 start-stop-daemon --start --quiet --chuid $RUNAS --pidfile $PIDSPATH/$PIDFILE --exec $DAEMON
@@ -150,9 +154,10 @@ start() {
 
 stop() {
 	log_daemon_msg "Stopping $DESCRIPTION"
-
+	
 	isRunning
-        if [ $? -eq $TRUE ]; then
+	isAlive=$?
+        if [ "${isAlive}" -eq $TRUE ]; then
                 start-stop-daemon --stop --quiet --pidfile $PIDSPATH/$PIDFILE
 
 		removePIDFile
@@ -180,17 +185,19 @@ reload() {
 
 terminate() {
         log_daemon_msg "Force terminating (via KILL) $DESCRIPTION"
+        
+	PIDS=`pidof $PS` || true
 
-	PID=$(pidof_daemon)
-	if [ "${PID}" ]; then
-		kill $PID
-		removePIDFile
-		log_end_msg $SCRIPT_OK
-        elif [ "$(pidof $PS)" ]; then #need to refactor this...
-		log_end_msg $SCRIPT_ERROR
-	else
-		log_end_msg $SCRIPT_ERROR
-	fi
+	[ -e $PIDSPATH/$PIDFILE ] && PIDS2=`cat $PIDSPATH/$PIDFILE`
+
+	for i in $PIDS; do
+		if [ "$i" = "$PIDS2" ]; then
+	        	kill $i
+			removePIDFile
+		fi
+	done
+
+	log_end_msg $SCRIPT_OK
 
 }
 
@@ -201,11 +208,10 @@ pidof_daemon() {
 
     for i in $PIDS; do
         if [ "$i" = "$PIDS2" ]; then
-            echo $i
-            return 0
+            return 1
         fi
     done
-    return 1
+    return 0
 }
 
 case "$1" in
@@ -216,8 +222,8 @@ case "$1" in
 	stop
         ;;
   restart|force-reload)
-	start
 	stop
+	start
         ;;
   reload)
 	$1
