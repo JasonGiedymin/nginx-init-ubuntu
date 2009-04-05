@@ -25,7 +25,7 @@
 #          <jason.giedymin AT acronymlabs.com>.
 #
 # Version: 1.0 01-Apr-2009 jason.giedymin AT gmail.com
-# Notes: nginx init.d script for Ubuntu 8.10 and less versions.
+# Notes: nginx init.d script for Ubuntu 8.10 and lesser versions.
 #
 #------------------------------------------------------------------------------
 #                               MIT X11 License
