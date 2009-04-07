@@ -64,12 +64,12 @@
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 DAEMON=/usr/local/sbin/nginx
 
-NAME=nginx
+PS="nginx"
+PIDNAME="nginx"				#Lets you do $PS-Master or $PS-Slave
+PIDFILE=$PIDNAME.pid                    #pid file
+PIDSPATH=/acronymlabs/server
 DESCRIPTION="Nginx Server..."
 
-PIDSPATH=/acronymlabs/server
-PS=$NAME				#the process, which happens to be the NAME
-PIDFILE=$NAME.pid			#pid file
 RUNAS=root				#user to run as
 
 SCRIPT_OK=0				#ala error codes
@@ -99,6 +99,13 @@ fi
 #                               Functions
 #------------------------------------------------------------------------------
 
+setFilePerms(){
+
+        if [ -f $PIDSPATH/$PIDFILE ]; then
+                chmod 400 $PIDSPATH/$PIDFILE
+        fi
+}
+
 configtest() {
 	$DAEMON -t -c $NGINX_CONF_FILE
 }
@@ -123,17 +130,17 @@ status(){
 	isAlive=$?
 
 	if [ "${isAlive}" -eq $TRUE ]; then
-                echo "$NAME found running with processes:  `pidof $PS`"
+                echo "$PIDNAME found running with processes:  `pidof $PS`"
         else
-                echo "$NAME is NOT running."
+                echo "$PIDNAME is NOT running."
         fi
 
 
 }
 
 removePIDFile(){
-	if [ -f $PIDSPATH/$NAME.pid ]; then
-        	rm $PIDSPATH/$NAME.pid
+	if [ -f $PIDSPATH/PIDFILE ]; then
+        	rm $PIDSPATH/$PIDFILE
         fi
 }
 
@@ -147,8 +154,8 @@ start() {
                 log_end_msg $SCRIPT_ERROR
         else
                 start-stop-daemon --start --quiet --chuid $RUNAS --pidfile $PIDSPATH/$PIDFILE --exec $DAEMON
-                chmod 400 $PIDSPATH/$PIDFILE
-                log_end_msg $SCRIPT_OK
+                setFilePerms
+		log_end_msg $SCRIPT_OK
         fi
 }
 
@@ -238,7 +245,7 @@ case "$1" in
 	$1
 	;;
   *)
-	FULLPATH=/etc/init.d/$NAME
+	FULLPATH=/etc/init.d/$PIDNAME
 	echo "Usage: $FULLPATH {start|stop|restart|force-reload|status|configtest|terminate}"
 	exit 1
 	;;
