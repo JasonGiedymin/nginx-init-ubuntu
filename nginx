@@ -102,7 +102,7 @@ fi
 setFilePerms(){
 
         if [ -f $PIDSPATH/$PIDFILE ]; then
-                chmod 400 $PIDSPATH/$PIDFILE
+                chmod -f 400 $PIDSPATH/$PIDFILE
         fi
 }
 
@@ -140,7 +140,7 @@ status(){
 
 removePIDFile(){
 	if [ -f $PIDSPATH/PIDFILE ]; then
-        	rm $PIDSPATH/$PIDFILE
+        	rm -f $PIDSPATH/$PIDFILE
         fi
 }
 
