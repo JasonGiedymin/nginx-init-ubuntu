@@ -22,16 +22,17 @@
 # Provides:    nginx
 #
 # Author:  Jason Giedymin
-#          <jason.giedymin AT acronymlabs.com>.
+#          <jason.giedymin AT gmail.com>.
 #
-# Version: 1.0 01-Apr-2009 jason.giedymin AT gmail.com
-# Notes: nginx init.d script for Ubuntu 8.10 and lesser versions.
+# Version: 2.0 02-NOV-2009 jason.giedymin AT gmail.com
+# Notes: nginx init.d script for Ubuntu 9.10 and lesser versions.
 #
 #------------------------------------------------------------------------------
 #                               MIT X11 License
 #------------------------------------------------------------------------------
 #
-# Copyright (c) 2009 Jason Giedymin, http://AcronymLabs.com
+# Copyright (c) 2009 Jason Giedymin, http://Amuxbit.com formerly
+#				     http://AcronymLabs.com
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -65,17 +66,18 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 DAEMON=/usr/local/sbin/nginx
 
 PS="nginx"
-PIDNAME="nginx"				#Lets you do $PS-Master or $PS-Slave
+PIDNAME="nginx"				#lets you do $PS-slave
 PIDFILE=$PIDNAME.pid                    #pid file
-PIDSPATH=/acronymlabs/server
+PIDSPATH=/var/run
+
 DESCRIPTION="Nginx Server..."
 
-RUNAS=root				#user to run as
+RUNAS=root                              #user to run as
 
-SCRIPT_OK=0				#ala error codes
-SCRIPT_ERROR=1				#ala error codes
-TRUE=1					#boolean
-FALSE=0					#boolean
+SCRIPT_OK=0                             #ala error codes
+SCRIPT_ERROR=1                          #ala error codes
+TRUE=1                                  #boolean
+FALSE=0                                 #boolean
 
 lockfile=/var/lock/subsys/nginx
 NGINX_CONF_FILE="/usr/local/nginx/conf/nginx.conf"
@@ -102,7 +104,7 @@ fi
 setFilePerms(){
 
         if [ -f $PIDSPATH/$PIDFILE ]; then
-                chmod -f 400 $PIDSPATH/$PIDFILE
+                chmod 400 $PIDSPATH/$PIDFILE
         fi
 }
 
@@ -125,6 +127,34 @@ isRunning(){
         fi
 }
 
+#courtesy of php-fpm
+wait_for_pid () {
+        try=0
+
+        while test $try -lt 35 ; do
+
+                case "$1" in
+                        'created')
+                        if [ -f "$2" ] ; then
+                                try=''
+                                break
+                        fi
+                        ;;
+
+                        'removed')
+                        if [ ! -f "$2" ] ; then
+                                try=''
+                                break
+                        fi
+                        ;;
+                esac
+
+                #echo -n .
+                try=`expr $try + 1`
+                sleep 1
+        done
+}
+
 status(){
 	isRunning
 	isAlive=$?
@@ -139,8 +169,15 @@ status(){
 }
 
 removePIDFile(){
-	if [ -f $PIDSPATH/PIDFILE ]; then
-        	rm -f $PIDSPATH/$PIDFILE
+	if [ $1 ]; then
+                if [ -f $1 ]; then
+        	        rm -f $1
+	        fi
+        else
+		#Do default removal
+		if [ -f $PIDSPATH/$PIDFILE ]; then
+        	        rm -f $PIDSPATH/$PIDFILE
+	        fi
         fi
 }
 
@@ -153,9 +190,10 @@ start() {
         if [ "${isAlive}" -eq $TRUE ]; then
                 log_end_msg $SCRIPT_ERROR
         else
-                start-stop-daemon --start --quiet --chuid $RUNAS --pidfile $PIDSPATH/$PIDFILE --exec $DAEMON
+                start-stop-daemon --start --quiet --chuid $RUNAS --pidfile $PIDSPATH/$PIDFILE --exec $DAEMON \
+                -- -c $NGINX_CONF_FILE
                 setFilePerms
-		log_end_msg $SCRIPT_OK
+                log_end_msg $SCRIPT_OK
         fi
 }
 
@@ -167,9 +205,15 @@ stop() {
         if [ "${isAlive}" -eq $TRUE ]; then
                 start-stop-daemon --stop --quiet --pidfile $PIDSPATH/$PIDFILE
 
-		removePIDFile
+		wait_for_pid 'removed' $PIDSPATH/$PIDFILE
 
-                log_end_msg $SCRIPT_OK
+                if [ -n "$try" ] ; then
+                        log_end_msg $SCRIPT_ERROR
+                else
+                        removePIDFile
+	                log_end_msg $SCRIPT_OK
+                fi
+
         else
                 log_end_msg $SCRIPT_ERROR
         fi
@@ -185,6 +229,34 @@ reload() {
 		`killall -HUP $PS` #to be safe
 
                 log_end_msg $SCRIPT_OK
+        else
+                log_end_msg $SCRIPT_ERROR
+        fi
+}
+
+quietupgrade() {
+	log_daemon_msg "Peforming Quiet Upgrade $DESCRIPTION"
+
+        isRunning
+        isAlive=$?
+        if [ "${isAlive}" -eq $TRUE ]; then
+		kill -USR2 `cat $PIDSPATH/$PIDFILE`
+
+                wait_for_pid 'removed' $PIDSPATH/$PIDFILE
+
+                if [ -n "$try" ] ; then
+                        log_end_msg $SCRIPT_ERROR
+                else
+			kill -WINCH `cat $PIDSPATH/$PIDFILE.oldbin`
+
+			kill -QUIT `cat $PIDSPATH/$PIDFILE.oldbin`
+
+			wait_for_pid 'removed' $PIDSPATH/$PIDFILE.oldbin
+			removePIDFile $PIDSPATH/$PIDFILE.oldbin
+
+                        log_end_msg $SCRIPT_OK
+                fi
+
         else
                 log_end_msg $SCRIPT_ERROR
         fi
@@ -230,6 +302,7 @@ case "$1" in
         ;;
   restart|force-reload)
 	stop
+	sleep 1
 	start
         ;;
   reload)
@@ -241,12 +314,15 @@ case "$1" in
   configtest)
         $1
         ;;
+  quietupgrade)
+	$1
+	;;
   terminate)
 	$1
 	;;
   *)
-	FULLPATH=/etc/init.d/$PIDNAME
-	echo "Usage: $FULLPATH {start|stop|restart|force-reload|status|configtest|terminate}"
+	FULLPATH=/etc/init.d/$PS
+	echo "Usage: $FULLPATH {start|stop|restart|force-reload|status|configtest|quietupgrade|terminate}"
 	exit 1
 	;;
 esac
