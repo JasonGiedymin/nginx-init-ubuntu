@@ -26,6 +26,9 @@
 #
 # Version: 2.0 02-NOV-2009 jason.giedymin AT gmail.com
 # Notes: nginx init.d script for Ubuntu 9.10 and lesser versions.
+# 
+# This script's project home is:
+# 	http://code.google.com/p/nginx-init-ubuntu/
 #
 #------------------------------------------------------------------------------
 #                               MIT X11 License
