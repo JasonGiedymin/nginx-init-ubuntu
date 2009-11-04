@@ -304,7 +304,7 @@ terminate() {
 }
 
 destroy() {
-	log_daemon_msg "Force terminating and may includ self (via KILLALL) $DESCRIPTION"
+	log_daemon_msg "Force terminating and may include self (via KILLALL) $DESCRIPTION"
 	killall $PS -q >> /dev/null 2>&1
 	log_end_msg $SCRIPT_OK
 }
