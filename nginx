@@ -71,7 +71,8 @@ DAEMON=/usr/local/sbin/nginx
 PS="nginx"
 PIDNAME="nginx"				#lets you do $PS-slave
 PIDFILE=$PIDNAME.pid                    #pid file
-PIDSPATH=/var/run
+#PIDSPATH=/var/run
+PIDSPATH=/acronymlabs/server
 
 DESCRIPTION="Nginx Server..."
 
@@ -83,7 +84,8 @@ TRUE=1                                  #boolean
 FALSE=0                                 #boolean
 
 lockfile=/var/lock/subsys/nginx
-NGINX_CONF_FILE="/usr/local/nginx/conf/nginx.conf"
+#NGINX_CONF_FILE="/usr/local/nginx/conf/nginx.conf"
+NGINX_CONF_FILE="/usr/local/nginx/conf/single-no-proxy/nginx.conf"
 
 #------------------------------------------------------------------------------
 #                               Simple Tests
@@ -119,14 +121,25 @@ getPSCount() {
 	return `pgrep -f $PS | wc -l`
 }
 
-isRunning(){
-	pidof_daemon
-	PID=$?
+isRunning() {
+        if [ $1 ]; then
+                pidof_daemon $1
+                PID=$?
 
-	if [ $PID -gt 0 ]; then
-		return 1
+                if [ $PID -gt 0 ]; then
+                        return 1
+                else
+                        return 0
+                fi
         else
-                return 0
+                pidof_daemon
+                PID=$?
+
+                if [ $PID -gt 0 ]; then
+                        return 1
+                else
+                        return 0
+                fi
         fi
 }
 
@@ -244,22 +257,30 @@ quietupgrade() {
         isAlive=$?
         if [ "${isAlive}" -eq $TRUE ]; then
 		kill -USR2 `cat $PIDSPATH/$PIDFILE`
+		kill -WINCH `cat $PIDSPATH/$PIDFILE.oldbin`
+		
+		isRunning
+		isAlive=$?
+		if [ "${isAlive}" -eq $TRUE ]; then
+			kill -QUIT `cat $PIDSPATH/$PIDFILE.oldbin`
+			wait_for_pid 'removed' $PIDSPATH/$PIDFILE.oldbin
+                        removePIDFile $PIDSPATH/$PIDFILE.oldbin
 
-                wait_for_pid 'removed' $PIDSPATH/$PIDFILE
+			log_end_msg $SCRIPT_OK
+		else
+			log_end_msg $SCRIPT_ERROR
+			
+			log_daemon_msg "ERROR! Reverting back to original $DESCRIPTION"
 
-                if [ -n "$try" ] ; then
-                        log_end_msg $SCRIPT_ERROR
-                else
-			kill -WINCH `cat $PIDSPATH/$PIDFILE.oldbin`
-
+			kill -HUP `cat $PIDSPATH/$PIDFILE`
+			kill -TERM `cat $PIDSPATH/$PIDFILE.oldbin`
 			kill -QUIT `cat $PIDSPATH/$PIDFILE.oldbin`
 
 			wait_for_pid 'removed' $PIDSPATH/$PIDFILE.oldbin
-			removePIDFile $PIDSPATH/$PIDFILE.oldbin
+                        removePIDFile $PIDSPATH/$PIDFILE.oldbin
 
-                        log_end_msg $SCRIPT_OK
-                fi
-
+			log_end_msg $SCRIPT_ok
+		fi
         else
                 log_end_msg $SCRIPT_ERROR
         fi
@@ -275,12 +296,17 @@ terminate() {
 	for i in $PIDS; do
 		if [ "$i" = "$PIDS2" ]; then
 	        	kill $i
+                        wait_for_pid 'removed' $PIDSPATH/$PIDFILE
 			removePIDFile
 		fi
 	done
 
 	log_end_msg $SCRIPT_OK
+}
 
+destroy() {
+	log_daemon_msg "Force terminating including self (via KILLALL) $DESCRIPTION"
+	killall $PS -q >> /dev/null 2>&1
 }
 
 pidof_daemon() {
@@ -323,9 +349,13 @@ case "$1" in
   terminate)
 	$1
 	;;
+  destroy)
+	$1
+	;;
   *)
 	FULLPATH=/etc/init.d/$PS
-	echo "Usage: $FULLPATH {start|stop|restart|force-reload|status|configtest|quietupgrade|terminate}"
+	echo "Usage: $FULLPATH {start|stop|restart|force-reload|status|configtest|quietupgrade|terminate|destroy}"
+	echo "       The 'destroy' command should only be used as a last resort." 
 	exit 1
 	;;
 esac
