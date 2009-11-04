@@ -5,11 +5,12 @@
 # Required-Stop:     $remote_fs $syslog
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: nginx init.d script for Ubuntu 8.10 and lesser versions.
-# Description:       nginx init.d script for Ubuntu 8.10 and lesser versions.
+# Short-Description: nginx init.d dash script for Ubuntu <=9.10.
+# Description:       nginx init.d dash script for Ubuntu <=9.10.
 ### END INIT INFO
 #------------------------------------------------------------------------------
-# nginx - this script, which starts and stops the nginx daemon for ubuntu.
+# nginx - this Debian Almquist shell (dash) script, starts and stops the nginx 
+#         daemon for ubuntu 9.10 and lesser version numbered releases.
 #
 # description:  Nginx is an HTTP(S) server, HTTP(S) reverse \
 #               proxy and IMAP/POP3 proxy server.  This \
@@ -25,7 +26,7 @@
 #          <jason.giedymin AT gmail.com>.
 #
 # Version: 2.0 02-NOV-2009 jason.giedymin AT gmail.com
-# Notes: nginx init.d script for Ubuntu 9.10 and lesser versions.
+# Notes: nginx init.d dash script for Ubuntu <=9.10.
 # 
 # This script's project home is:
 # 	http://code.google.com/p/nginx-init-ubuntu/
@@ -71,8 +72,7 @@ DAEMON=/usr/local/sbin/nginx
 PS="nginx"
 PIDNAME="nginx"				#lets you do $PS-slave
 PIDFILE=$PIDNAME.pid                    #pid file
-#PIDSPATH=/var/run
-PIDSPATH=/acronymlabs/server
+PIDSPATH=/var/run
 
 DESCRIPTION="Nginx Server..."
 
@@ -84,8 +84,7 @@ TRUE=1                                  #boolean
 FALSE=0                                 #boolean
 
 lockfile=/var/lock/subsys/nginx
-#NGINX_CONF_FILE="/usr/local/nginx/conf/nginx.conf"
-NGINX_CONF_FILE="/usr/local/nginx/conf/single-no-proxy/nginx.conf"
+NGINX_CONF_FILE="/usr/local/nginx/conf/nginx.conf"
 
 #------------------------------------------------------------------------------
 #                               Simple Tests
