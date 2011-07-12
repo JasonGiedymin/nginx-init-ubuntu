@@ -5,12 +5,12 @@
 # Required-Stop:     $remote_fs $syslog
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: nginx init.d dash script for Ubuntu <=9.10.
-# Description:       nginx init.d dash script for Ubuntu <=9.10.
+# Short-Description: nginx init.d dash script for Ubuntu or other *nix.
+# Description:       nginx init.d dash script for Ubuntu or other *nix.
 ### END INIT INFO
 #------------------------------------------------------------------------------
 # nginx - this Debian Almquist shell (dash) script, starts and stops the nginx 
-#         daemon for ubuntu 9.10 and lesser version numbered releases.
+#         daemon for Ubuntu and other *nix releases.
 #
 # description:  Nginx is an HTTP(S) server, HTTP(S) reverse \
 #               proxy and IMAP/POP3 proxy server.  This \
@@ -19,24 +19,23 @@
 #
 # processname: nginx
 # config:      /usr/local/nginx/conf/nginx.conf
-# pidfile:     /acronymlabs/server/nginx.pid
+# pidfile:     /var/run/nginx.pid
 # Provides:    nginx
 #
 # Author:  Jason Giedymin
 #          <jason.giedymin AT gmail.com>.
 #
 # Version: 2.0 02-NOV-2009 jason.giedymin AT gmail.com
-# Notes: nginx init.d dash script for Ubuntu <=9.10.
+# Notes: nginx init.d dash script for Ubuntu.
 # 
 # This script's project home is:
-# 	http://code.google.com/p/nginx-init-ubuntu/
+# 	http://github.com/JasonGiedymin/nginx-init-ubuntu
 #
 #------------------------------------------------------------------------------
 #                               MIT X11 License
 #------------------------------------------------------------------------------
 #
-# Copyright (c) 2009 Jason Giedymin, http://Amuxbit.com formerly
-#				     http://AcronymLabs.com
+# Copyright (c) 2009 Jason Giedymin, http://jasongiedymin.com
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
