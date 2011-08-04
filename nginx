@@ -66,7 +66,13 @@
 #                               Consts
 #------------------------------------------------------------------------------
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-DAEMON=/usr/local/sbin/nginx
+
+if [ -f /usr/local/nginx/sbin/nginx ];
+then
+   DAEMON=/usr/local/nginx/sbin/nginx
+else
+   DAEMON=/usr/local/sbin/nginx
+fi
 
 PS="nginx"
 PIDNAME="nginx"                     #lets you do $PS-slave
@@ -166,6 +172,23 @@ wait_for_pid () {
     done
 }
 
+wait_for_not_running(){
+    try=0
+    while test $try -lt 35 ; do
+
+        isRunning
+        isAlive=$?
+
+        if [ "${isAlive}" -eq $TRUE ]; then
+            try=`expr $try + 1`
+            sleep 1
+        else
+            try=''
+            break
+        fi
+    done
+}
+
 status(){
     isRunning
     isAlive=$?
@@ -175,6 +198,11 @@ status(){
     else
         echo "$PIDNAME is NOT running."
     fi
+}
+
+writePIDFile(){
+    ps axuww | grep $DAEMON | grep $NGINX_CONF_FILE | perl -lpe '($_) = /^[\D]*(\d*)/' > $PIDSPATH/$PIDFILE
+    setFilePerms
 }
 
 removePIDFile(){
@@ -202,7 +230,7 @@ start() {
         start-stop-daemon --start --quiet --chuid \
         $RUNAS --pidfile $PIDSPATH/$PIDFILE --exec $DAEMON \
         -- -c $NGINX_CONF_FILE
-        setFilePerms
+        writePIDFile
         log_end_msg $SCRIPT_OK
     fi
 }
@@ -216,7 +244,7 @@ stop() {
     if [ "${isAlive}" -eq $TRUE ]; then
         start-stop-daemon --stop --quiet --pidfile $PIDSPATH/$PIDFILE
 
-        wait_for_pid 'removed' $PIDSPATH/$PIDFILE
+        wait_for_not_running
 
         if [ -n "$try" ] ; then
             log_end_msg $SCRIPT_ERROR
@@ -302,6 +330,7 @@ terminate() {
 
 destroy() {
     log_daemon_msg "Force terminating and may include self (via KILLALL) $DESCRIPTION"
+    removePIDFile
     killall $PS -q >> /dev/null 2>&1
     log_end_msg $SCRIPT_OK
 }
