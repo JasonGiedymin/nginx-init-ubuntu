@@ -14,19 +14,20 @@
 #
 # description:  Nginx is an HTTP(S) server, HTTP(S) reverse \
 #               proxy and IMAP/POP3 proxy server.  This \
-#       script will manage the initiation of the \
-#       server and it's process state.
+#               script will manage the initiation of the \
+#               server and it's process state.
 #
 # processname: nginx
 # config:      /usr/local/nginx/conf/nginx.conf
-# pidfile:     /var/run/nginx.pid
+# pidfile:     /usr/local/nginx/logs/nginx.pid
 # Provides:    nginx
 #
 # Author:  Jason Giedymin
 #          <jason.giedymin AT gmail.com>.
 #
-# Version: 2.0 02-NOV-2009 jason.giedymin AT gmail.com
+# Version: 3.0 22-APR-2013 jason.giedymin AT gmail.com
 # Notes: nginx init.d dash script for Ubuntu.
+# Tested with: Ubuntu 12.10, nginx-1.3.16
 # 
 # This script's project home is:
 #   http://github.com/JasonGiedymin/nginx-init-ubuntu
@@ -35,7 +36,7 @@
 #                               MIT X11 License
 #------------------------------------------------------------------------------
 #
-# Copyright (c) 2009 Jason Giedymin, http://jasongiedymin.com
+# Copyright (c) 2008-2013 Jason Giedymin, http://jasongiedymin.com
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -66,12 +67,12 @@
 #                               Consts
 #------------------------------------------------------------------------------
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-DAEMON=/usr/local/sbin/nginx
+DAEMON=/usr/local/nginx/sbin/nginx
 
 PS="nginx"
 PIDNAME="nginx"                     #lets you do $PS-slave
 PIDFILE=$PIDNAME.pid                #pid file
-PIDSPATH=/var/run
+PIDSPATH=/usr/local/nginx/logs      #default pid location, you should change it
 
 DESCRIPTION="Nginx Server..."
 
