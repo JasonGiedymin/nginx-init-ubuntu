@@ -8,6 +8,7 @@ Check out my other [repos](http://github.com/JasonGiedymin)!
 
 
 ## Last tested with:
+
 1. Ubuntu 12.10
 2. [nginx-1.3.16](http://nginx.org/download/nginx-1.3.16.tar.gz)
 
@@ -21,20 +22,34 @@ A great resource is the [Nginx Wiki](http://wiki.nginx.org/).
 
 ## Basic Install ##
 Basic install instructions, use sudo if necessary for the below (depends on your setup/security).
-1. [optional as you may have these installed] sudo apt-get install libpcre3-dev zlib1g-dev
-2. download/curl/wget nginx 
-2. tar -xvf <nginx.ver.tar>
-3. cd nginx-<dot-version>
-4. ./configure
-5. make
-6. sudo make install
-7. copy/download/curl/wget the init script
-8. chmod +x nginx
-9. ./nginx status
-10. ./nginx start
-11. ./nginx stop
-12. [optional] sudo update-rc.d -f nginx defaults
 
+    # [optional as you may have these installed]
+    sudo apt-get install libpcre3-dev zlib1g-dev
+    
+    mkdir ~/temp/nginx-install
+    cd ~/temp/nginx-install
+    
+    # download/curl/wget nginx 
+    wget http://nginx.org/download/nginx-1.3.16.tar.gz
+    tar -xvf nginx-1.3.16.tar.gz
+    cd nginx-1.3.16/
+    ./configure
+    make
+    sudo make install
+    
+    #copy/download/curl/wget the init script
+    sudo wget https://raw.github.com/JasonGiedymin/nginx-init-ubuntu/master/nginx -O /etc/init.d/nginx
+    sudo chmod +x /etc/init.d/nginx
+    
+    service nginx status  # to poll for current status
+    service nginx stop    # to stop any servers if any
+    service nginx start   # to start the server
+    
+    #[optional] 
+    sudo update-rc.d -f nginx defaults
+
+    #[optional remove the upstart script]
+    sudo update-rc.d -f nginx remove
 
 ## Contributions ##
 _Contributions are welcome!_
