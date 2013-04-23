@@ -15,7 +15,7 @@ Check out my other [repos](http://github.com/JasonGiedymin)!
 
 ## Notes ##
 It is recommended to install [Nginx](http://nginx.net/) by doing a full compile & build. Not all package repositories keep their branches updated. For security it is your duty to maintain a good working environment and thus includes all interfacing applications.
-This script works turn-key with the default compile of ngin. It is fully recommended that you go through the variables contained within this script if you have a custom compiled nginx install.
+This script works turn-key with the default compile of nginx. It is fully recommended that you go through the variables contained within this script if you have a custom compiled build.
 
 A great resource is the [Nginx Wiki](http://wiki.nginx.org/).
 
