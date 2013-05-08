@@ -261,7 +261,7 @@ quietupgrade() {
         if [ "${isAlive}" -eq $TRUE ]; then
             kill -QUIT `cat $PIDSPATH/$PIDFILE.oldbin`
             wait_for_pid 'removed' $PIDSPATH/$PIDFILE.oldbin
-                        removePIDFile $PIDSPATH/$PIDFILE.oldbin
+            removePIDFile $PIDSPATH/$PIDFILE.oldbin
 
             log_end_msg $SCRIPT_OK
         else
@@ -279,7 +279,7 @@ quietupgrade() {
             log_end_msg $SCRIPT_ok
         fi
     else
-            log_end_msg $SCRIPT_ERROR
+        log_end_msg $SCRIPT_ERROR
     fi
 }
 
