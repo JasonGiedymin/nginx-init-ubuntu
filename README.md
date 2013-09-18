@@ -9,8 +9,8 @@ Check out my other [repos](http://github.com/JasonGiedymin)!
 
 ## Last tested with:
 
-1. Ubuntu 12.10
-2. [nginx-1.3.16](http://nginx.org/download/nginx-1.3.16.tar.gz)
+1. Ubuntu 12.xx & 13.xx
+2. [nginx-1.3.16](http://nginx.org/download/nginx-1.3.16.tar.gz) - should also work with 1.4.xx series, just haven't tested it yet.
 
 
 ## Notes ##
