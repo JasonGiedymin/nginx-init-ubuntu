@@ -65,8 +65,8 @@ LSB_FUNC=/lib/lsb/init-functions
 
 # Test that init functions exists
 test -r $LSB_FUNC || {
-  echo "$0: Cannot find $LSB_FUNC! Script exiting." 1>&2
-  exit 5
+    echo "$0: Cannot find $LSB_FUNC! Script exiting." 1>&2
+    exit 5
 }
 
 . $LSB_FUNC
@@ -100,8 +100,8 @@ NGINX_CONF_FILE="/usr/local/nginx/conf/nginx.conf"
 
 # Test if nginx is a file and executable
 test -x $DAEMON || {
-  echo "$0: You don't have permissions to execute nginx." 1>&2
-  exit 4
+    echo "$0: You don't have permissions to execute nginx." 1>&2
+    exit 4
 }
 
 # Include nginx defaults if available
@@ -159,14 +159,14 @@ wait_for_pid () {
     while test $try -lt 35 ; do
         case "$1" in
             'created')
-            if [ -f "$2" ] ; then
+            if [ -f "$2" ]; then
                 try=''
                 break
             fi
             ;;
 
             'removed')
-            if [ ! -f "$2" ] ; then
+            if [ ! -f "$2" ]; then
                 try=''
                 break
             fi
@@ -184,10 +184,10 @@ status(){
 
     if [ "${isAlive}" -eq $TRUE ]; then
         log_success_msg "$PIDNAME found running with processes:  `pidof $PS`"
-	exit 0
+        exit 0
     else
         log_warning_msg "$PIDNAME is NOT running."
-	exit 3
+        exit 3
     fi
 }
 
@@ -234,7 +234,7 @@ stop() {
 
         wait_for_pid 'removed' $PIDSPATH/$PIDFILE
 
-        if [ -n "$try" ] ; then
+        if [ -n "$try" ]; then
             log_failure_msg $SCRIPT_ERROR
             exit 1
         else
