@@ -10,7 +10,7 @@ Check out my other [repos](http://github.com/JasonGiedymin)!
 ## Last tested with:
 
 1. Ubuntu 12.xx & 13.xx
-2. [nginx-1.3.16](http://nginx.org/download/nginx-1.3.16.tar.gz) - should also work with 1.4.xx series, just haven't tested it yet.
+2. [nginx-1.4.3](http://nginx.org/download/nginx-1.4.3.tar.gz) - should also work with 1.5.xx series, just haven't tested it yet.
 
 
 ## Notes ##
@@ -26,13 +26,13 @@ Basic install instructions, use sudo if necessary for the below (depends on your
     # [optional as you may have these installed]
     sudo apt-get install libpcre3-dev zlib1g-dev
     
-    mkdir ~/temp/nginx-install
+    mkdir -p ~/temp/nginx-install
     cd ~/temp/nginx-install
     
     # download/curl/wget nginx 
-    wget http://nginx.org/download/nginx-1.3.16.tar.gz
-    tar -xvf nginx-1.3.16.tar.gz
-    cd nginx-1.3.16/
+    wget http://nginx.org/download/nginx-1.4.3.tar.gz
+    tar -xvf nginx-1.4.3.tar.gz
+    cd nginx-1.4.3/
     ./configure
     make
     sudo make install
