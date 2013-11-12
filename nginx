@@ -286,9 +286,9 @@ quietupgrade() {
             log_end_msg $SCRIPT_OK
             exit 0
         else
-            log_end_msg $SCRIPT_ERROR
+            log_warning_msg $SCRIPT_ERROR
             
-            log_daemon_msg "ERROR! Reverting back to original $DESCRIPTION"
+            log_warning_msg "ERROR! Reverting back to original $DESCRIPTION"
 
             kill -HUP `cat $PIDSPATH/$PIDFILE`
             kill -TERM `cat $PIDSPATH/$PIDFILE.oldbin`
