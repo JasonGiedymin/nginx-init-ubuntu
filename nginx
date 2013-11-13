@@ -25,7 +25,7 @@
 # Author:  Jason Giedymin
 #          <jason.giedymin AT gmail.com>.
 #
-# Version: 3.5.0 11-NOV-2013 jason.giedymin AT gmail.com
+# Version: 3.5.1 11-NOV-2013 jason.giedymin AT gmail.com
 # Notes: nginx init.d dash script for Ubuntu.
 # Tested with: Ubuntu 13.10, nginx-1.4.3
 # 
@@ -183,12 +183,14 @@ status(){
     isAlive=$?
 
     if [ "${isAlive}" -eq $TRUE ]; then
-        log_success_msg "$PIDNAME found running with processes:  `pidof $PS`"
-        exit 0
+        log_warning_msg "$DESCRIPTION found running with processes:  `pidof $PS`"
+        rc=0
     else
-        log_warning_msg "$PIDNAME is NOT running."
-        exit 3
+        log_warning_msg "$DESCRIPTION is NOT running."
+        rc=3
     fi
+
+    return
 }
 
 removePIDFile(){
@@ -211,16 +213,18 @@ start() {
     isAlive=$?
     
     if [ "${isAlive}" -eq $TRUE ]; then
-        log_warning_msg $SCRIPT_ERROR
-        exit 0
+        log_end_msg $SCRIPT_ERROR
+        rc=0
     else
         start-stop-daemon --start --quiet --chuid \
         $RUNAS --pidfile $PIDSPATH/$PIDFILE --exec $DAEMON \
         -- -c $NGINX_CONF_FILE
         setFilePerms
         log_end_msg $SCRIPT_OK
-        exit 0
+        rc=0
     fi
+
+    return
 }
 
 stop() {
@@ -235,17 +239,19 @@ stop() {
         wait_for_pid 'removed' $PIDSPATH/$PIDFILE
 
         if [ -n "$try" ]; then
-            log_failure_msg $SCRIPT_ERROR
-            exit 1
+            log_end_msg $SCRIPT_ERROR
+            rc=0 # lsb states 1, but under status it is 2 (which is more prescriptive). Deferring to standard.
         else
             removePIDFile
             log_end_msg $SCRIPT_OK
-            exit 0
+            rc=0
         fi
     else
-        log_warning_msg $SCRIPT_ERROR
-        exit 0
+        log_end_msg $SCRIPT_ERROR
+        rc=7
     fi
+
+    return
 }
 
 reload() {
@@ -256,13 +262,15 @@ reload() {
     isRunning
 
     if [ $? -eq $TRUE ]; then
-        `killall -HUP $PS` #to be safe
+        kill -HUP `cat $PIDSPATH/$PIDFILE`
         log_end_msg $SCRIPT_OK
-        exit 0
+        rc=0
     else
-        log_warning_msg $SCRIPT_ERROR
-        exit 7
+        log_end_msg $SCRIPT_ERROR
+        rc=7
     fi
+
+    return
 }
 
 quietupgrade() {
@@ -284,11 +292,11 @@ quietupgrade() {
             removePIDFile $PIDSPATH/$PIDFILE.oldbin
 
             log_end_msg $SCRIPT_OK
-            exit 0
+            rc=0
         else
-            log_warning_msg $SCRIPT_ERROR
+            log_end_msg $SCRIPT_ERROR
             
-            log_warning_msg "ERROR! Reverting back to original $DESCRIPTION"
+            log_daemon_msg "ERROR! Reverting back to original $DESCRIPTION"
 
             kill -HUP `cat $PIDSPATH/$PIDFILE`
             kill -TERM `cat $PIDSPATH/$PIDFILE.oldbin`
@@ -298,12 +306,14 @@ quietupgrade() {
             removePIDFile $PIDSPATH/$PIDFILE.oldbin
 
             log_end_msg $SCRIPT_OK
-            exit 0
+            rc=0
         fi
     else
-        log_warning_msg $SCRIPT_ERROR
-        exit 0 # service isn't running, nothing to do
+        log_end_msg $SCRIPT_ERROR
+        rc=7
     fi
+
+    return
 }
 
 terminate() {
@@ -322,14 +332,14 @@ terminate() {
     done
 
     log_end_msg $SCRIPT_OK
-    exit 0
+    rc=0
 }
 
 destroy() {
     log_daemon_msg "Force terminating and may include self (via KILLALL) $DESCRIPTION"
     killall $PS -q >> /dev/null 2>&1
     log_end_msg $SCRIPT_OK
-    exit 0
+    rc=0
 }
 
 pidof_daemon() {
@@ -346,6 +356,7 @@ pidof_daemon() {
     return 0
 }
 
+action="$1"
 case "$1" in
     start)
         start
@@ -355,6 +366,9 @@ case "$1" in
         ;;
     restart|force-reload)
         stop
+        # if [ $rc -ne 0 ]; then
+        #     script_exit
+        # fi
         sleep 1
         start
         ;;
@@ -384,3 +398,5 @@ case "$1" in
         ;;
 esac
 
+echo "exiting with $rc"
+exit $rc
