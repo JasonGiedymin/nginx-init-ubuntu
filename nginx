@@ -398,5 +398,4 @@ case "$1" in
         ;;
 esac
 
-echo "exiting with $rc"
 exit $rc
