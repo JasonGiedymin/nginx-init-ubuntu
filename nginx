@@ -219,9 +219,16 @@ start() {
         start-stop-daemon --start --quiet --chuid \
         $RUNAS --pidfile $PIDSPATH/$PIDFILE --exec $DAEMON \
         -- -c $NGINX_CONF_FILE
+        status=$?
         setFilePerms
-        log_end_msg $SCRIPT_OK
-        rc=0
+
+        if [ "${status}" -eq 0 ]; then
+            log_end_msg $SCRIPT_OK
+            rc=0
+        else
+            log_end_msg $SCRIPT_ERROR
+            rc=7
+        fi
     fi
 
     return
