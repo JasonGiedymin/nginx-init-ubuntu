@@ -16,7 +16,8 @@ Vagrant.configure('2') do |config|
 
     instance.vm.provision 'ansible' do |prov|
       prov.inventory_path = 'inventory.yml'
-      prov.playbook = 'test-nginx.yml'
+      prov.playbook = 'deploy-nginx.yml'
+      # prov.playbook = 'integration-tests.yml' # to run only the tests
     end # prov
   end # instance
 
