@@ -25,9 +25,9 @@
 # Author:  Jason Giedymin
 #          <jason.giedymin AT gmail.com>.
 #
-# Version: 3.5.0 11-NOV-2013 jason.giedymin AT gmail.com
+# Version: 3.6.0 30-JAN-2014 jason.giedymin AT gmail.com
 # Notes: nginx init.d dash script for Ubuntu.
-# Tested with: Ubuntu 13.10, nginx-1.4.3
+# Tested with: Ubuntu 13.10, nginx-1.5.9
 # 
 # This script's project home is:
 #   http://github.com/JasonGiedymin/nginx-init-ubuntu

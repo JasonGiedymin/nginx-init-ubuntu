@@ -1,0 +1,2 @@
+[nodes]
+node1 ansible_ssh_port=22 ansible_ssh_host=172.16.1.10
