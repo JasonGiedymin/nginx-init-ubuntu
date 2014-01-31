@@ -51,5 +51,39 @@ Basic install instructions, use sudo if necessary for the below (depends on your
     #[optional remove the upstart script]
     sudo update-rc.d -f nginx remove
 
+
+## Advanced Configuration ##
+If you need to override the values within the script you should use `/etc/defaults/nginx`.
+
+You can override any of these values:
+
+  - PATH
+  - DAEMON
+  - PS
+  - PIDNAME
+  - PIDFILE
+  - PIDSPATH
+  - DESCRIPTION
+  - RUNAS
+  - lockfile
+  - NGINX_CONF_FILE
+
+
+For instance, if you needed to change the description of the server during logging:
+
+    # Edit [/etc/defaults/nginx] and add the below line
+    DESCRIPTION="My Awesome Nginx Server..."
+
+    # Next run the below command:
+    sudo service nginx restart
+
+    # Output of running restart with nginx defaults file:
+    * Stopping My Super Nginx Server...                                  [ OK ] 
+    * Starting My Super Nginx Server...                                  [ OK ]
+
+    # Notice that is says "My Super Nginx Server..." as opposed to the default
+    # "Nginx Server...".
+
+
 ## Contributions ##
 _Contributions are welcome!_
