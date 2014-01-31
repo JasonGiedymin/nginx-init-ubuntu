@@ -1,0 +1,30 @@
+---
+
+#
+# nginx-init-ubuntu install
+#
+# Warning, do not use this as a production ansible playbook.
+# A production one is pending. This is only for testing.
+#
+
+- hosts: all
+  sudo: True
+  vars:
+    nginx_version: "1.5.9"
+    nginx_download_file: "nginx-{{nginx_version}}.tar.gz"
+    nginx_install_dir: /tmp/nginx-install
+  tasks:
+    - file: path={{nginx_install_dir}} state=directory
+    - apt: pkg={{item}} state=present update_cache=yes
+      with_items: 
+        - libpcre3-dev
+        - zlib1g-dev
+    - get_url: url=http://nginx.org/download/{{nginx_download_file}} dest={{nginx_install_dir}}
+    - copy: src=./nginx dest=/etc/init.d/nginx force=yes mode=755 owner=root group=root
+    - command: tar -xvf {{nginx_download_file}} chdir={{nginx_install_dir}}
+    - name: Compile and install
+      shell: ./configure && make && make install chdir="{{nginx_install_dir}}/nginx-{{nginx_version}}"
+    - command: service nginx stop
+    - command: service nginx start
+
+- include: integration-tests.yml

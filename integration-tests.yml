@@ -1,0 +1,15 @@
+---
+#
+# integration-tests.yml
+#
+
+- hosts: all
+  sudo: True
+  tasks:
+    # Tests
+    - name: Start nginx
+      service: name=nginx state=started
+    - name: Check if nginx service is started
+      shell: "ps aux | grep '[n]ginx: master process'"
+    - name: Check for 200 response from nginx
+      shell: "curl -Is http://localhost | grep '200 OK'"

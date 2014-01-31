@@ -10,7 +10,7 @@ Check out my other [repos](http://github.com/JasonGiedymin)!
 ## Last tested with:
 
 1. Ubuntu 12.xx & 13.xx
-2. [nginx-1.4.3](http://nginx.org/download/nginx-1.4.3.tar.gz) - should also work with 1.5.xx series, just haven't tested it yet.
+2. [nginx-1.5.9](http://nginx.org/download/nginx-1.5.9.tar.gz) - should also work with 1.6.xx series, just haven't tested it yet.
 
 
 ## Notes ##
@@ -30,9 +30,9 @@ Basic install instructions, use sudo if necessary for the below (depends on your
     cd ~/temp/nginx-install
     
     # download/curl/wget nginx 
-    wget http://nginx.org/download/nginx-1.4.3.tar.gz
-    tar -xvf nginx-1.4.3.tar.gz
-    cd nginx-1.4.3/
+    wget http://nginx.org/download/nginx-1.5.9.tar.gz
+    tar -xvf nginx-1.5.9.tar.gz
+    cd nginx-1.5.9/
     ./configure
     make
     sudo make install
