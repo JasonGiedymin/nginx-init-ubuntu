@@ -85,5 +85,24 @@ For instance, if you needed to change the description of the server during loggi
     # "Nginx Server...".
 
 
+## Testing
+Tests run as part of the deployment scripts `integration-tests.yml`.
+
+To start make sure you have [vagrant](http://vagrantup.com), and [ansible](https://github.com/ansible/ansible) installed.
+
+Download the Ubuntu base box:
+
+    vagrant box add
+    # http://cloud-images.ubuntu.com/vagrant/saucy/current/saucy-server-cloudimg-amd64-vagrant-disk1.box
+
+Run vagrant:
+
+    vagrant up
+
+Manually provision again:
+
+    vagrant provision
+
+
 ## Contributions ##
 _Contributions are welcome!_
