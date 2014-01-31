@@ -1,5 +1,12 @@
 # nginx-init-ubuntu
 
+* v3.6.0 - Testing framework, simple deployment script, Fix #8
+  - Add Vagrantfile
+  - Add `deploy-nginx.yml` which is a simple ansible deployment script
+  - Add `integration-tests.yml` which check for service and response
+  - Add `.gitignore` entry for `.vagrant`
+  - Fix #8 - Error return code now correctly returns when nginx fails to start
+
 * v3.5.1 - Fix #2, part 2
   - Add `log_end_msg` repr (back) for friendly display but make exit codes proper
   - Add exit codes at eos
