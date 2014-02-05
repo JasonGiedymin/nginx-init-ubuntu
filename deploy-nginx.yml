@@ -13,6 +13,9 @@
     nginx_version: "1.5.9"
     nginx_download_file: "nginx-{{nginx_version}}.tar.gz"
     nginx_install_dir: /tmp/nginx-install
+  handlers:
+    - name: start nginx
+      command: service nginx start
   tasks:
     - file: path={{nginx_install_dir}} state=directory
     - apt: pkg={{item}} state=present update_cache=yes
@@ -24,7 +27,6 @@
     - command: tar -xvf {{nginx_download_file}} chdir={{nginx_install_dir}}
     - name: Compile and install
       shell: ./configure && make && make install chdir="{{nginx_install_dir}}/nginx-{{nginx_version}}"
-    - command: service nginx stop
-    - command: service nginx start
+      notify: start nginx
 
 - include: integration-tests.yml
