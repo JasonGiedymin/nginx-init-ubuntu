@@ -7,6 +7,12 @@ Author: [Jason Giedymin](http://jasongiedymin.com) <jasong -_at_- apache -=dot=-
 Check out my other [repos](http://github.com/JasonGiedymin)!
 
 
+## Support
+
+Rest assured that this repo will be maintained _indefinitely_ beyond Ubuntu LTS 
+and systemd adoption into Ubuntu stable.
+
+
 ## Last tested with:
 
 1. Ubuntu 12.xx & 13.xx
