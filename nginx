@@ -98,16 +98,16 @@ NGINX_CONF_FILE="/usr/local/nginx/conf/nginx.conf"
 #                               Simple Tests
 #------------------------------------------------------------------------------
 
+# Include nginx defaults if available
+if [ -f /etc/default/nginx ]; then
+    . /etc/default/nginx
+fi
+
 # Test if nginx is a file and executable
 test -x $DAEMON || {
     echo "$0: You don't have permissions to execute nginx." 1>&2
     exit 4
 }
-
-# Include nginx defaults if available
-if [ -f /etc/default/nginx ]; then
-    . /etc/default/nginx
-fi
 
 #set exit condition
 #set -e
