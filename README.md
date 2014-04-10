@@ -59,7 +59,7 @@ Basic install instructions, use sudo if necessary for the below (depends on your
 
 
 ## Advanced Configuration ##
-If you need to override the values within the script you should use `/etc/defaults/nginx`.
+If you need to override the values within the script you should use `/etc/default/nginx`.
 
 You can override any of these values:
 
@@ -77,7 +77,7 @@ You can override any of these values:
 
 For instance, if you needed to change the description of the server during logging:
 
-    # Edit [/etc/defaults/nginx] and add the below line
+    # Edit [/etc/default/nginx] and add the below line
     DESCRIPTION="My Awesome Nginx Server..."
 
     # Next run the below command:
