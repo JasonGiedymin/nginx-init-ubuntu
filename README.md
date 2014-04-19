@@ -2,7 +2,7 @@
 
 Tried and true Nginx init script.
 
-Ubuntu, Vagrant, and Docker tested!
+Ubuntu, Vagrant, and [Docker](https://github.com/AnsibleShipyard/ansible-nginx/blob/master/Dockerfile) tested!
 
 Author: [Jason Giedymin](http://jasongiedymin.com) <jasong -_at_- apache -=dot=- org>
 
