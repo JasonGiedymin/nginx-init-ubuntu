@@ -2,6 +2,8 @@
 
 Tried and true Nginx init script.
 
+Ubuntu, Vagrant, and Docker tested!
+
 Author: [Jason Giedymin](http://jasongiedymin.com) <jasong -_at_- apache -=dot=- org>
 
 Check out my other [repos](http://github.com/JasonGiedymin)!
