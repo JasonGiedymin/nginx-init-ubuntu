@@ -109,6 +109,10 @@ Manually provision again:
 
     vagrant provision
 
+### Using with Docker
+A basic Dockerfile will arrive shortly for testing, but note that I focued my efforts on creating an nginx [ansible role](https://github.com/AnsibleShipyard/ansible-nginx). [This repo](https://github.com/AnsibleShipyard/ansible-nginx) has a [Dockerfile](https://github.com/AnsibleShipyard/ansible-nginx/blob/master/Dockerfile) which will install Nginx along with `nginx-init-ubuntu` (this repo) using ansible. Until the basic testing Dockerfile is in place here please refer to the [ansible role](https://github.com/AnsibleShipyard/ansible-nginx) and it's [Dockerfile](https://github.com/AnsibleShipyard/ansible-nginx/blob/master/Dockerfile) -- if your looking for stability.
+
+The basic testing Dockerfile that will be present here will be just that. Basic. If your looking for a more production and developer friendly [Dockerfile look here](https://github.com/AnsibleShipyard/ansible-nginx/blob/master/Dockerfile).
 
 ## Contributions ##
 _Contributions are welcome!_
