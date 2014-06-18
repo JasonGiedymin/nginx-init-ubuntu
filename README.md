@@ -66,6 +66,7 @@ If you need to override the values within the script you should use `/etc/defaul
 You can override any of these values:
 
   - PATH
+  - NGINXPATH
   - DAEMON
   - PS
   - PIDNAME
@@ -91,6 +92,13 @@ For instance, if you needed to change the description of the server during loggi
 
     # Notice that is says "My Super Nginx Server..." as opposed to the default
     # "Nginx Server...".
+    
+The NGINXPATH value should point to your installation of Nginx, the default is /usr/local/nginx
+
+It's likely you'll need to update the NGINXPATH value if you didn't install from source. Eg, if you install Nginx using apt-get on Ubuntu nginx will be installed to /etc/nginx
+
+    # Changing NGINXPATH when Nginx was installed with apt-get
+    NGINXPATH=/etc/nginx
 
 
 ## Testing
