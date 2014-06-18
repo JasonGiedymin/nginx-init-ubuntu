@@ -1,5 +1,10 @@
 # nginx-init-ubuntu
 
+* v3.7.0
+  - Missing reload action from service (@violuke), Fixes #15
+  - Add NGINXPATH var (@mattbearman), Fixes #14
+  - Version bump
+
 * v3.6.0 - Testing framework, simple deployment script, Fix #8
   - Add Vagrantfile
   - Add `deploy-nginx.yml` which is a simple ansible deployment script

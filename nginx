@@ -25,10 +25,10 @@
 # Author:  Jason Giedymin
 #          <jason.giedymin AT gmail.com>.
 #
-# Version: 3.6.0 30-JAN-2014 jason.giedymin AT gmail.com
+# Version: 3.7.0 30-JAN-2014 jason.giedymin AT gmail.com
 # Notes: nginx init.d dash script for Ubuntu.
 # Tested with: Ubuntu 13.10, nginx-1.5.9
-# 
+#
 # This script's project home is:
 #   http://github.com/JasonGiedymin/nginx-init-ubuntu
 #
@@ -209,10 +209,10 @@ removePIDFile(){
 
 start() {
     log_daemon_msg "Starting $DESCRIPTION"
-    
+
     isRunning
     isAlive=$?
-    
+
     if [ "${isAlive}" -eq $TRUE ]; then
         log_end_msg $SCRIPT_ERROR
         rc=0
@@ -237,10 +237,10 @@ start() {
 
 stop() {
     log_daemon_msg "Stopping $DESCRIPTION"
-    
+
     isRunning
     isAlive=$?
-    
+
     if [ "${isAlive}" -eq $TRUE ]; then
         start-stop-daemon --stop --quiet --pidfile $PIDSPATH/$PIDFILE
 
@@ -286,11 +286,11 @@ quietupgrade() {
 
     isRunning
     isAlive=$?
-    
+
     if [ "${isAlive}" -eq $TRUE ]; then
         kill -USR2 `cat $PIDSPATH/$PIDFILE`
         kill -WINCH `cat $PIDSPATH/$PIDFILE.oldbin`
-        
+
         isRunning
         isAlive=$?
 
@@ -303,7 +303,7 @@ quietupgrade() {
             rc=0
         else
             log_end_msg $SCRIPT_ERROR
-            
+
             log_daemon_msg "ERROR! Reverting back to original $DESCRIPTION"
 
             kill -HUP `cat $PIDSPATH/$PIDFILE`
@@ -326,7 +326,7 @@ quietupgrade() {
 
 terminate() {
     log_daemon_msg "Force terminating (via KILL) $DESCRIPTION"
-        
+
     PIDS=`pidof $PS` || true
 
     [ -e $PIDSPATH/$PIDFILE ] && PIDS2=`cat $PIDSPATH/$PIDFILE`
@@ -401,7 +401,7 @@ case "$1" in
     *)
         FULLPATH=/etc/init.d/$PS
         echo "Usage: $FULLPATH {start|stop|restart|force-reload|reload|status|configtest|quietupgrade|terminate|destroy}"
-        echo "       The 'destroy' command should only be used as a last resort." 
+        echo "       The 'destroy' command should only be used as a last resort."
         exit 3
         ;;
 esac
