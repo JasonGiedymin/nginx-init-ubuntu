@@ -400,7 +400,7 @@ case "$1" in
         ;;
     *)
         FULLPATH=/etc/init.d/$PS
-        echo "Usage: $FULLPATH {start|stop|restart|force-reload|status|configtest|quietupgrade|terminate|destroy}"
+        echo "Usage: $FULLPATH {start|stop|restart|force-reload|reload|status|configtest|quietupgrade|terminate|destroy}"
         echo "       The 'destroy' command should only be used as a last resort." 
         exit 3
         ;;
