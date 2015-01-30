@@ -144,7 +144,7 @@ If your looking for a more production and developer friendly [Dockerfile, look h
 
 When using the ansible role mentioned above you will need to set `nginx_docker_override` to `True` as the role will detect if running within a Dockerfile. This is to prevent nginx running in `daemon` mode.
 
-A copy of [nginx-init-ubuntu](https://github.com/JasonGiedymin/nginx-init-ubuntu) is present in the [ansible role](https://github.com/AnsibleShipyard/ansible-nginx) role.
+A copy of [nginx-init-ubuntu](https://github.com/JasonGiedymin/nginx-init-ubuntu) is present in the [ansible role](https://github.com/AnsibleShipyard/ansible-nginx).
 
 ## Contributions ##
 _Contributions are welcome!_
