@@ -1,5 +1,10 @@
 # nginx-init-ubuntu
 
+* v3.8.0
+  - Add better defaults handling by changing source order and using default values
+  - Add travis file
+  - Add Travis banner
+
 * v3.7.0
   - Missing reload action from service (@violuke), Fixes #15
   - Add NGINXPATH var (@mattbearman), Fixes #14
