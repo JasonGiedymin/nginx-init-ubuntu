@@ -56,7 +56,7 @@ Basic install instructions, use sudo if necessary for the below (depends on your
     cd ~/temp/nginx-install
     
     # download/curl/wget nginx 
-    wget http://nginx.org/download/nginx-1.5.9.tar.gz
+    wget http://nginx.org/download/nginx-1.7.9.tar.gz
     tar -xvf nginx-1.7.9.tar.gz
     cd nginx-1.7.9/
     ./configure
