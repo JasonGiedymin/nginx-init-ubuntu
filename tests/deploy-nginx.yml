@@ -10,7 +10,7 @@
 - hosts: all
   sudo: True
   vars:
-    nginx_version: "1.5.9"
+    nginx_version: "1.7.9"
     nginx_download_file: "nginx-{{nginx_version}}.tar.gz"
     nginx_install_dir: /tmp/nginx-install
   handlers:
@@ -23,7 +23,7 @@
         - libpcre3-dev
         - zlib1g-dev
     - get_url: url=http://nginx.org/download/{{nginx_download_file}} dest={{nginx_install_dir}}
-    - copy: src=./nginx dest=/etc/init.d/nginx force=yes mode=755 owner=root group=root
+    - copy: src=../nginx dest=/etc/init.d/nginx force=yes mode=755 owner=root group=root
     - command: tar -xvf {{nginx_download_file}} chdir={{nginx_install_dir}}
     - name: Compile and install
       shell: ./configure && make && make install chdir="{{nginx_install_dir}}/nginx-{{nginx_version}}"

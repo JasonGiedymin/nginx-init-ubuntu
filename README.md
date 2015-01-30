@@ -1,8 +1,14 @@
 # nginx-init-ubuntu #
 
+[![Build Status](https://travis-ci.org/JasonGiedymin/nginx-init-ubuntu.svg?branch=master)](https://travis-ci.org/JasonGiedymin/nginx-init-ubuntu)
+
 Tried and true Nginx init script.
 
 Ubuntu, Vagrant, and [Docker](https://github.com/AnsibleShipyard/ansible-nginx/blob/master/Dockerfile) tested!
+
+You may also want to use the [AnsibleShipyard ansible-nginx playbook](https://github.com/AnsibleShipyard/ansible-nginx).
+
+Simple ansible playbook sits in this repository.
 
 Author: [Jason Giedymin](http://jasongiedymin.com) <jasong -_at_- apache -=dot=- org>
 
@@ -17,8 +23,8 @@ and systemd adoption into Ubuntu stable.
 
 ## Last tested with:
 
-1. Ubuntu 12.xx & 13.xx
-2. [nginx-1.5.9](http://nginx.org/download/nginx-1.5.9.tar.gz) - should also work with 1.6.xx series, just haven't tested it yet.
+1. Ubuntu 14.xx (works with prior versions)
+2. [nginx-1.7.9](http://nginx.org/download/nginx-1.7.9.tar.gz) (works with prior versions)
 
 
 ## Notes ##
@@ -39,8 +45,8 @@ Basic install instructions, use sudo if necessary for the below (depends on your
     
     # download/curl/wget nginx 
     wget http://nginx.org/download/nginx-1.5.9.tar.gz
-    tar -xvf nginx-1.5.9.tar.gz
-    cd nginx-1.5.9/
+    tar -xvf nginx-1.7.9.tar.gz
+    cd nginx-1.7.9/
     ./configure
     make
     sudo make install
@@ -74,7 +80,6 @@ You can override any of these values:
   - PIDSPATH
   - DESCRIPTION
   - RUNAS
-  - lockfile
   - NGINX_CONF_FILE
 
 
@@ -108,8 +113,9 @@ To start make sure you have [vagrant](http://vagrantup.com), and [ansible](https
 
 Download the Ubuntu base box:
 
-    vagrant box add
-    # http://cloud-images.ubuntu.com/vagrant/saucy/current/saucy-server-cloudimg-amd64-vagrant-disk1.box
+```bash
+vagrant box add ubuntu-14.10 https://cloud-images.ubuntu.com/vagrant/utopic/current/utopic-server-cloudimg-amd64-vagrant-disk1.box
+```
 
 Run vagrant:
 
