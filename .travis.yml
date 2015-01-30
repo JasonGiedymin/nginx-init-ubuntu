@@ -1,0 +1,20 @@
+---
+language: python
+python: "2.7"
+
+env:
+  - SITE=deploy-nginx.yml
+
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install curl -y
+
+install:
+  - pip install -U ansible
+
+script:
+  - "ansible-playbook -i tests/inventory.yml tests/$SITE --syntax-check"
+
+  - "ansible-playbook -i tests/inventory.yml tests/deploy-nginx.yml --connection=local --sudo -vvvv"
+
+  - "ansible-playbook -i tests/inventory.yml tests/integration-tests.yml --connection=local --sudo -vvvv"

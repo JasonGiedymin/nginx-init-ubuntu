@@ -6,18 +6,18 @@ Vagrant.configure('2') do |config|
 
   config.vm.define 'test-node' do |instance|
 
-    # Make sure to download as 'ubuntu-13.10'
-    # vagrant box add
-    # http://cloud-images.ubuntu.com/vagrant/saucy/current/saucy-server-cloudimg-amd64-vagrant-disk1.box
+    # Make sure to download as 'ubuntu-14.10'
+    # vagrant box add ubuntu-14.10 https://cloud-images.ubuntu.com/vagrant/utopic/current/utopic-server-cloudimg-amd64-vagrant-disk1.box
 
-    instance.vm.box = 'ubuntu-13.10'
+    instance.vm.box = 'ubuntu-14.10'
     instance.vm.host_name = 'test-node'
     instance.vm.network 'private_network', ip: '172.16.1.10'
 
     instance.vm.provision 'ansible' do |prov|
-      prov.inventory_path = 'inventory.yml'
+      # prov.inventory_path = 'inventory.yml'
       prov.playbook = 'deploy-nginx.yml'
       # prov.playbook = 'integration-tests.yml' # to run only the tests
+      prov.verbose = 'vvvv'
     end # prov
   end # instance
 
