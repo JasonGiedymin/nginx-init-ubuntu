@@ -1,4 +1,5 @@
-# nginx-init-ubuntu #
+nginx-init-ubuntu
+=================
 
 
 ## Status
@@ -56,7 +57,7 @@ Basic install instructions, use sudo if necessary for the below (depends on your
     cd ~/temp/nginx-install
     
     # download/curl/wget nginx 
-    wget http://nginx.org/download/nginx-1.5.9.tar.gz
+    wget http://nginx.org/download/nginx-1.7.9.tar.gz
     tar -xvf nginx-1.7.9.tar.gz
     cd nginx-1.7.9/
     ./configure
@@ -144,7 +145,7 @@ If your looking for a more production and developer friendly [Dockerfile, look h
 
 When using the ansible role mentioned above you will need to set `nginx_docker_override` to `True` as the role will detect if running within a Dockerfile. This is to prevent nginx running in `daemon` mode.
 
-A copy of [nginx-init-ubuntu](https://github.com/JasonGiedymin/nginx-init-ubuntu) is present in the [ansible role](https://github.com/AnsibleShipyard/ansible-nginx) role.
+A copy of [nginx-init-ubuntu](https://github.com/JasonGiedymin/nginx-init-ubuntu) is present in the [ansible role](https://github.com/AnsibleShipyard/ansible-nginx).
 
 ## Contributions ##
 _Contributions are welcome!_
