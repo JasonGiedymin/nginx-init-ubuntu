@@ -1,5 +1,8 @@
 # nginx-init-ubuntu
 
+* v3.9.0
+  - Update documentation to reference v1.7.9 (@v3.9.0-beta), Fixes #27, #19.
+  
 * v3.8.0
   - Add better defaults handling by changing source order and using default values
   - Add travis file
