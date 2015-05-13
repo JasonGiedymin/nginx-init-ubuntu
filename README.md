@@ -6,11 +6,11 @@ nginx-init-ubuntu
 
 [![Build Status](https://travis-ci.org/JasonGiedymin/nginx-init-ubuntu.svg?branch=master)](https://travis-ci.org/JasonGiedymin/nginx-init-ubuntu)
 
-Current release: [v3.8.0](https://github.com/JasonGiedymin/nginx-init-ubuntu/releases/tag/v3.8.0)
+Current release: [v3.9.0](https://github.com/JasonGiedymin/nginx-init-ubuntu/releases/tag/v3.9.0)
 
-Previous stable release [v3.7.0](https://github.com/JasonGiedymin/nginx-init-ubuntu/releases/tag/v3.7.0)
+Previous stable release [v3.7.0](https://github.com/JasonGiedymin/nginx-init-ubuntu/releases/tag/v3.8.0)
 
-Notes: v3.7.0 has been stable for the last several months without issues. v3.8.0 while
+Notes: v3.8.0 has been stable for the last several months without issues. v3.9.0 while
 stable, is new.
 
 ## Info
