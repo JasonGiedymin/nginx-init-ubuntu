@@ -93,7 +93,7 @@ You can override any of these values:
 | PIDNAME | Lets you do $PS-slave
 | PIDFILE | Pid file
 | PIDSPATH | Default PID location
-| DESCRIPTION (process description) | Process description
+| DESCRIPTION | Process description
 | RUNAS | User to run as
 | NGINX_CONF_FILE | Config file path
 
