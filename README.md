@@ -84,17 +84,18 @@ If you need to override the values within the script you should use `/etc/defaul
 
 You can override any of these values:
 
-  - PATH
-  - NGINXPATH
-  - DAEMON
-  - PS
-  - PIDNAME
-  - PIDFILE
-  - PIDSPATH
-  - DESCRIPTION
-  - RUNAS
-  - NGINX_CONF_FILE
-
+| Variable        | Function    |
+| ------------- |-------------|
+| PATH | Path environment variable
+| NGINXPATH | Root path where installed
+| DAEMON | Path to Deamon binary
+| PS | Process name
+| PIDNAME | Lets you do $PS-slave
+| PIDFILE | Pid file
+| PIDSPATH | Default PID location
+| DESCRIPTION | Process description
+| RUNAS | User to run as
+| NGINX_CONF_FILE | Config file path
 
 For instance, if you needed to change the description of the server during logging:
 
