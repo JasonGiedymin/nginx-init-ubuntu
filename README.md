@@ -86,7 +86,7 @@ You can override any of these values:
 
 | Variable        | Function    |
 | ------------- |-------------|
-| PATH | 
+| PATH | Path environment variable
 | NGINXPATH | Root path where installed
 | DAEMON | Path to Deamon binary
 | PS | Process name
