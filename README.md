@@ -88,7 +88,7 @@ You can override any of these values:
 | ------------- |-------------|
 | PATH | Path environment variable
 | NGINXPATH | Root path where installed
-| DAEMON | Path to Deamon binary
+| DAEMON | Path to Daemon binary
 | PS | Process name
 | PIDNAME | Lets you do $PS-slave
 | PIDFILE | Pid file
